@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 import torch.nn.functional as F
+from torch_geometric.nn import GATConv, RGCNConv, TransformerConv
 
 
 class PositionWiseFeedForward(nn.Module):
@@ -74,6 +75,66 @@ class TransformerEncoderLayer(nn.Module):
         x = self.add_norm_after_ff(ff_output, x)
 
         return x
+
+
+class GraphFusionLayerAtt(nn.Module):
+    def __init__(self, hidden_dim, heads=2):
+        super().__init__()
+        # Проекционные слои для признаков
+        self.proj_audio = nn.Linear(hidden_dim, hidden_dim)
+        self.proj_text = nn.Linear(hidden_dim, hidden_dim)
+
+        # Графовые слои
+        self.gat1 = GATConv(hidden_dim, hidden_dim, heads=heads)
+        self.gat2 = GATConv(hidden_dim*heads, hidden_dim)
+
+        self.attention_fusion = nn.Linear(hidden_dim, 1)
+
+        # Финальная проекция
+        self.fc = nn.Linear(hidden_dim, hidden_dim)
+
+    def build_complete_graph(self, num_nodes):
+        # Создаем полный граф (каждый узел соединен со всеми)
+        edge_index = []
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                if i != j:
+                    edge_index.append([i, j])
+        return torch.tensor(edge_index).t().contiguous()
+
+    def forward(self, first_stats, second_stats):
+        """
+        first_stats: [batch_size, hidden_dim]
+        second_stats: [batch_size, hidden_dim]
+        """
+        batch_size = first_stats.size(0)
+
+        # Проекция признаков
+        x_first = F.relu(self.proj_audio(first_stats))  # [batch_size, hidden_dim]
+        x_second = F.relu(self.proj_text(second_stats))    # [batch_size, hidden_dim]
+
+        # Объединение узлов (1 и 2 попеременно)
+        nodes = torch.stack([x_first, x_second], dim=1)  # [batch_size, 2, hidden_dim]
+        nodes = nodes.view(-1, nodes.size(-1))        # [batch_size*2, hidden_dim]
+
+        # Построение графа (полный граф для каждого элемента батча)
+        edge_index = self.build_complete_graph(2)  # Граф для одной пары 1-2
+        edge_index = edge_index.to(first_stats.device)
+
+        # Применение GAT
+        x = F.relu(self.gat1(nodes, edge_index))
+        x = self.gat2(x, edge_index)
+
+        # Разделяем обратно аудио и текст
+        x = x.view(batch_size, 2, -1)  # [batch_size, 2, hidden_dim]
+
+        # Усреднение по модальностям
+        # fused = torch.mean(x, dim=1)   # [batch_size, hidden_dim]
+
+        weights = F.softmax(self.attention_fusion(x), dim=1)
+        fused = torch.sum(weights * x, dim=1)  # [batch_size, hidden_dim]
+
+        return self.fc(fused)
 
 
 class MultiModalTransformer(nn.Module):
