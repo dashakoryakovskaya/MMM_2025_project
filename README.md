@@ -15,18 +15,18 @@
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2409.10173}, 
-}```
+}
 
-```@misc{wu2020visual,
+@misc{wu2020visual,
       title={Visual Transformers: Token-based Image Representation and Processing for Computer Vision}, 
       author={Bichen Wu and Chenfeng Xu and Xiaoliang Dai and Alvin Wan and Peizhao Zhang and Zhicheng Yan and Masayoshi Tomizuka and Joseph Gonzalez and Kurt Keutzer and Peter Vajda},
       year={2020},
       eprint={2006.03677},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
-}```
+}
 
-```@inproceedings{deng2009imagenet,
+@inproceedings{deng2009imagenet,
   title={Imagenet: A large-scale hierarchical image database},
   author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
   booktitle={2009 IEEE conference on computer vision and pattern recognition},
