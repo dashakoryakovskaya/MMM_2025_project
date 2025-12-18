@@ -2,8 +2,9 @@
 Коряковская Дарья Олеговна  
 Задача - решение [соревнования](https://www.kaggle.com/competitions/avito-demand-prediction/overview) на Kaggle.  
 Цель - предсказание вероятности продажи товара на платформе Avito на основе данных предложения (заголовок, описание, изображение, цена, город и тд).  
-Метрика - RMSE
-Архитектура - ![model](model.png)
+Метрика - RMSE  
+Архитектура: [<img src="model.png" width="30" />](model.png)
+
 
 ### Используемые модели и данные
 Данные доступны в рамках [соревнования](https://www.kaggle.com/competitions/avito-demand-prediction/overview)  
