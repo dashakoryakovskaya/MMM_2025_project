@@ -7,6 +7,7 @@
 ### Используемые модели и данные
 Данные доступны в рамках [соревнования](https://www.kaggle.com/competitions/avito-demand-prediction/overview)  
 
+```
 @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
       title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA}, 
       author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Andreas Koukounas and Nan Wang and Han Xiao},
@@ -34,4 +35,5 @@
   year={2009},
   organization={Ieee}
 }
+```
 
