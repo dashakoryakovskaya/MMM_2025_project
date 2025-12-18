@@ -6,6 +6,7 @@
 Архитектура: [<img src="model.png" width="200" />](model.png)
 
 Эксперименты с последней моделью: ```notebooks/image-text_cross-attention_graph_fusion.ipynb```
+[Результаты](https://docs.google.com/presentation/d/1E7Eyua4KxAKEWwGum09MxPNp6gc7SXh3xrvD0nu9Odw/edit?usp=sharing)  
 ### Используемые модели и данные
 Данные доступны в рамках [соревнования](https://www.kaggle.com/competitions/avito-demand-prediction/overview)  
 
